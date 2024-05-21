@@ -14,10 +14,13 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         backgroundColor: 'transparent', position: 'absolute',
-        bottom: 70,
+        bottom: 25,
+        position:'relative'
 
     },
-    cardImage: {},
+    cardImage: {
+        height:150
+    },
     text: {
         color: 'red',
     },
@@ -38,6 +41,15 @@ const styles = StyleSheet.create({
     rating: {
         flexDirection: 'row',
         margin: 5
+    },
+    trashIcon:{
+        position:'absolute',
+        right:20,
+        top:5,
+        backgroundColor:'white',
+        borderRadius:100,
+        padding:5
+        
     }
 
 })

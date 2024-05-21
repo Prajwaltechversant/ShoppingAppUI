@@ -1,19 +1,21 @@
-import { View, Text, ScrollView, Image, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, FlatList, TouchableOpacity, Modal, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from './style'
 import Right from 'react-native-vector-icons/AntDesign'
 import ButonFooter from '../../components/ProductPageFooter'
+import Add from '../../components/AddProduct'
 export default function Product({ route }) {
   const [item, setItem] = useState()
   const [images, setimages] = useState([])
 
 
-  const [mainImage, setMainImage] = useState(item?.thumbnail)
+  const [mainImage, setMainImage] = useState(item?.productImagesUri[0])
   useEffect(() => {
     setItem(route.params.item.item)
-    setimages(route.params.item.item.images)
+    setimages(route.params.item.item.productImagesUri)
   }, [route.params])
   // console.log(images, 'akak')
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
@@ -30,7 +32,9 @@ export default function Product({ route }) {
 
           </View>
         </View>
-        <Image src={mainImage ? mainImage : item?.thumbnail} style={{ width: '100%', height: 200 }} />
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Image src={mainImage ? mainImage : item?.productImagesUri[0]} style={{ width: '100%', height: 200 }} />
+        </TouchableOpacity>
 
         {/* Product images */}
 
@@ -68,7 +72,7 @@ export default function Product({ route }) {
             <Text style={{ color: '#FE9900' }}> Estimated delivery time : 48 hours</Text>
           </View>
           <View >
-            <Text style={{ textAlign:'left', color: 'black', marginVertical:20, fontSize:20, fontWeight:'700' }}>About this Item</Text>
+            <Text style={{ textAlign: 'left', color: 'black', marginVertical: 20, fontSize: 20, fontWeight: '700' }}>About this Item</Text>
             <View style={styles.descriptionContainer}>
               <Text style={styles.loremText}>
                 {item?.description}
@@ -77,9 +81,19 @@ export default function Product({ route }) {
           </View>
         </View>
       </ScrollView>
-      <View style={{ position: 'absolute', bottom: 5,alignSelf:'center' }}>
+      <View style={{ position: 'absolute', bottom: 5, alignSelf: 'center' }}>
         <ButonFooter />
       </View>
+
+      <Modal visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View>
+          <Image source={{ uri: mainImage }} width={'100%'} height={'100%'} />
+        </View>
+      </Modal>
     </>
   )
 }
