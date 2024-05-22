@@ -8,7 +8,11 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { addProduct } from '../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
 import { useScreenContext } from '../../context/ScreenContextProvider';
-
+import Dropdown from '../dropdown';
+import { categories } from './Category';
+import { brand } from './Category';
+import { size } from './Category';
+import { color } from './Category';
 
 
 export default function Add({ edit, item }) {
@@ -45,18 +49,20 @@ export default function Add({ edit, item }) {
         price: '',
         productImagesUri: [],
         brand: "",
-        category:'',
-        discount:''
+        category: '',
+        discount: '',
+        size:'',
+        color:''
 
     })
 
     const handleUpload = async () => {
         setinputType('file')
         const result = await launchCamera()
-        console.log(result.assets[0].uri)
+        // console.log(result.assets[0].uri)
         setProduct({ ...product, thumbnailuri: result.assets[0].uri })
     }
-    // console.log(product)
+    console.log(product, 'adding')
 
     const handleFileUpload = async () => {
         setinputType('camera')
@@ -75,7 +81,7 @@ export default function Add({ edit, item }) {
         const imageUris = result.assets.map(item => item.uri)
         setProduct({ ...product, productImagesUri: imageUris })
     }
-    console.log(product)
+    // console.log(product)
 
     const handleSubmit = () => {
         const { title, thumbnailuri, productImagesUri, description, price } = product
@@ -171,17 +177,28 @@ export default function Add({ edit, item }) {
                                         value={item ? item.description : ''}
                                         mode='outlined'
                                     />}
-                                <TextInput placeholder='Brand'
+                                {/* <TextInput placeholder='Brand'
                                     mode='outlined'
                                     style={screenStyles.inputBox} keyboardType='default' onChangeText={(e) => setProduct({ ...product, brand: e })}
-                                />
-                                <TextInput placeholder='Category'
+                                /> */}
+                                <View style={screenStyles.inputBox}>
+                                    <Dropdown data={brand} value={'brand'} setProduct={setProduct} product={product}/>
+                                </View>
+                                                                {/* <TextInput placeholder='Category'
                                     mode='outlined'
                                     style={screenStyles.inputBox} keyboardType='default' onChangeText={(e) => setProduct({ ...product, category: e })}
-                                />
+                                /> */}
+                                <View style={screenStyles.inputBox}>
+                                    <Dropdown data={categories} value={'category'} setProduct={setProduct} product={product} />
+                                </View>
+                                <View style={screenStyles.inputBox}>
+                                    <Dropdown data={size} value={'size'} setProduct={setProduct} product={product} />
+                                </View>
+                                <View style={screenStyles.inputBox}>
+                                    <Dropdown data={color} value={'color'} setProduct={setProduct} product={product} />
+                                </View>
                                 <TextInput placeholder='Discount' style={screenStyles.inputBox} keyboardType='number-pad' onChangeText={(e) => setProduct({ ...product, discount: e })}
                                     mode='outlined'
-
                                 />
                             </View>
 

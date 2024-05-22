@@ -34,7 +34,6 @@ export default function ProductCard({ item, navigation }) {
 
     const handleDelete = () => {
         setModalVisible(true)
-        console.log(modalVisible, "modal status")
         if (deleteProductStatus) {
             dispatch(deleteProduct(item.title))
         }

@@ -7,30 +7,65 @@ import TopNavigation from '../../components/TopNavigation'
 import ProductCard from '../../components/ProductCards'
 import { ActivityIndicator } from 'react-native-paper'
 import Add from '../../components/AddProduct'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { searchProduct } from '../../redux/slices/productSlice'
 
 export default function Home({ navigation }) {
-  // const [data, setData] = useState()
+  const [searchStatus, setSearchStatus] = useState(false)
 
-  // const getData = async () => {
-  //   const response = await fetch('https://dummyjson.com/products')
-  //   const jsondata = await response.json()
-  //   setData(jsondata.products)
-  // }
+  const [searchResults, setSearchresults] = useState([])
 
-  // useEffect(() => {
-  //   getData()
-  // }, [])
+  const dispatch = useDispatch()
+
+  // const screenContext = useScreenContext()
+
+  // const screenStyles = styles(screenContext,
+  //   screenContext[screenContext.windowisPortrait ? 'windoWidth' : 'windoHeight'],
+  //   screenContext[screenContext.windowisPortrait ? 'windowHeight' : 'windowWidth']
+  // )
+
+
+  // let sample = products[0].uri
+
+
+  const searchProductS = (item) => {
+    console.log("query",item)
+    if (item.trim() !== '') {
+      dispatch(searchProduct(item))
+      setSearchStatus(true)
+    }
+    else {
+      setSearchresults([])
+    }
+  }
+  const searchresult = useSelector(state => state.products.searchItems)
+  useEffect(() => {
+    setSearchresults(searchresult)
+  }, [searchresult])
+  console.log(searchResults, 'filtering...')
 
   const data = useSelector(state => state.products.allProducts)
-  console.log("new data", data)
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <SearchBar />
+        <SearchBar searchProductS={searchProductS}  />
         <TopNavigation />
       </View>
       <View style={styles.contentContainer}>
+       {
+       searchResults.length>0 ?
+       <FlatList
+          data={searchResults}
+          renderItem={({ item }) => (
+            <ProductCard item={item} navigation={navigation} />
+          )}
+          numColumns={2}
+          ListEmptyComponent={
+            <Text style={{color:'red'}}>No data found</Text>
+          }
+        />
+
+        :
         <FlatList
           data={data}
           renderItem={({ item }) => (
@@ -41,6 +76,7 @@ export default function Home({ navigation }) {
             <ActivityIndicator color='red' size={'large'} animating={true} />
           }
         />
+        }
       </View>
 
       <View style={styles.addContainer}>

@@ -38,10 +38,11 @@ const styles = (screenContext, width, height, edit) => StyleSheet.create({
 
   },
   inputBox: {
-    width: '80%',
+    width: '100%',
     marginVertical: 10,
     borderRadius: 10,
-    backgroundColor: 'yellow'
+    backgroundColor: 'yellow',
+    color:'red'
   },
   modalView: {
     backgroundColor: 'transparent',

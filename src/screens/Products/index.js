@@ -4,6 +4,8 @@ import styles from './style'
 import Right from 'react-native-vector-icons/AntDesign'
 import ButonFooter from '../../components/ProductPageFooter'
 import Add from '../../components/AddProduct'
+import Carousel from '../../components/carousel'
+import CarouselContainer from '../../components/carousel'
 export default function Product({ route }) {
   const [item, setItem] = useState()
   const [images, setimages] = useState([])
@@ -16,6 +18,7 @@ export default function Product({ route }) {
   }, [route.params])
   // console.log(images, 'akak')
   const [modalVisible, setModalVisible] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0)
 
   return (
     <>
@@ -32,9 +35,10 @@ export default function Product({ route }) {
 
           </View>
         </View>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <CarouselContainer images={images} currImg={mainImage} setCarouselIndex={setCarouselIndex} />
+        {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Image src={mainImage ? mainImage : item?.productImagesUri[0]} style={{ width: '100%', height: 200 }} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* Product images */}
 
@@ -44,8 +48,8 @@ export default function Product({ route }) {
               <FlatList
                 data={images}
                 horizontal={true}
-                renderItem={({ item }) =>
-                  <TouchableOpacity onPress={() => setMainImage(item)}>
+                renderItem={({ item, index }) =>
+                  <TouchableOpacity onPress={() => setMainImage(index)}>
                     <Image source={{ uri: item }} style={styles.imagesArray}
                       alt='No fdata'
                     />

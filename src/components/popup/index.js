@@ -6,12 +6,10 @@ import { Button } from 'react-native-paper';
 import { PopupContextAPI } from '../../context/PopupContext';
 
 
-
 export default function Popup() {
 
     const { deleteProductStatus, setDeleteProductStatus } = useContext(DeleteProductContextAPI)
     const { modalVisible, setModalVisible } = useContext(PopupContextAPI)
-    console.log(modalVisible, "popup st")
     const handleDeleteStatus = (res) => {
         if (res) {
             setDeleteProductStatus(true)

@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native"
 
-const styles = StyleSheet.create({
+const styles = (screenContext, width, height) =>
+StyleSheet.create({
 
     container: {
 
