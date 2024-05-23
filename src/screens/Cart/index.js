@@ -1,10 +1,34 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Button, StyleSheet, View } from 'react-native';
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
 
 export default function Cart() {
+  const width = useSharedValue(100);
+
+  const handlePress = () => {
+    width.value = withSpring(width.value + 50);
+  };
+
   return (
-    <View>
-      <Text>Cart</Text>
+    <View style={styles.container}>
+      <Animated.View
+        style={Object.assign(Object.assign({}, styles.box), { width })}
+      />
+
+      <Button onPress={handlePress} title="Click me" />
     </View>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  box: {
+    height: 100,
+    backgroundColor: '#b58df1',
+    borderRadius: 20,
+    marginVertical: 64,
+  },
+});

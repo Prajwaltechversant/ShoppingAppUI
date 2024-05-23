@@ -13,6 +13,7 @@ import { categories } from './Category';
 import { brand } from './Category';
 import { size } from './Category';
 import { color } from './Category';
+import coloPalette from '../../assets/Theme/coloPalette';
 
 
 export default function Add({ edit, item }) {
@@ -51,8 +52,8 @@ export default function Add({ edit, item }) {
         brand: "",
         category: '',
         discount: '',
-        size:'',
-        color:''
+        size: '',
+        color: ''
 
     })
 
@@ -62,7 +63,6 @@ export default function Add({ edit, item }) {
         // console.log(result.assets[0].uri)
         setProduct({ ...product, thumbnailuri: result.assets[0].uri })
     }
-    console.log(product, 'adding')
 
     const handleFileUpload = async () => {
         setinputType('camera')
@@ -81,7 +81,6 @@ export default function Add({ edit, item }) {
         const imageUris = result.assets.map(item => item.uri)
         setProduct({ ...product, productImagesUri: imageUris })
     }
-    // console.log(product)
 
     const handleSubmit = () => {
         const { title, thumbnailuri, productImagesUri, description, price } = product
@@ -97,19 +96,19 @@ export default function Add({ edit, item }) {
         <View style={screenStyles.root}>
             <View style={screenStyles.container} >
                 <IconButton
-                    icon={!edit ? 'message-plus' : 'pencil'}
+                    icon={'plus'}
                     mode='contained'
                     // iconColor={MD3Colors.success}
                     iconColor='white'
                     size={30}
                     style={styles.IconButton}
-                    containerColor='green'
+                    containerColor={coloPalette.light.primary}
                     onPress={showModal}
                 />
             </View>
 
             <View style={screenStyles.modalContainer}>
-                <Modal visible={visible} style={screenStyles.modalContainer} animationType='slide' presentationStyle='fullScreen' >
+                <Modal visible={visible} style={screenStyles.modalContainer} animationType='fade' transparent={true}  >
                     <View style={screenStyles.modalView}>
                         <Text style={screenStyles.textStyle}> Add Product </Text>
                         <KeyboardAvoidingView>
@@ -120,7 +119,6 @@ export default function Add({ edit, item }) {
                                     multiline={true}
                                     style={screenStyles.inputBox}
                                     onChangeText={(e) => setProduct({ ...product, title: e })}
-
                                 />
                                     :
                                     <TextInput
@@ -161,12 +159,15 @@ export default function Add({ edit, item }) {
 
                                     />}
                                 <View style={screenStyles.uploadContainer}>
-                                    <Button icon={'upload'} mode='container' style={screenStyles.uploadBtn} onPress={handleProductImages} >
-                                        Upload Images
+                                    <Text style={screenStyles.textStyle}>Upload Images</Text>
+                                    <View style={screenStyles.uploadBtns}>
+                                    <Button icon={'upload'} mode='container' textColor={coloPalette.light.tertiary} style={screenStyles.uploadBtn} onPress={handleProductImages} >
+                                        Upload 
                                     </Button>
-                                    <Button icon={'upload'} mode='container' style={screenStyles.uploadBtn} onPress={handleProductImages} >
-                                        Upload Images
+                                    <Button icon={'upload'} mode='container' textColor={coloPalette.light.tertiary} style={screenStyles.uploadBtn} onPress={handleProductImages} >
+                                        Upload 
                                     </Button>
+                                    </View>
                                 </View>
                                 {!item ? <TextInput placeholder='Price' style={screenStyles.inputBox} keyboardType='number-pad' onChangeText={(e) => setProduct({ ...product, price: e })}
                                     mode='outlined'
@@ -182,14 +183,14 @@ export default function Add({ edit, item }) {
                                     style={screenStyles.inputBox} keyboardType='default' onChangeText={(e) => setProduct({ ...product, brand: e })}
                                 /> */}
                                 <View style={screenStyles.inputBox}>
-                                    <Dropdown data={brand} value={'brand'} setProduct={setProduct} product={product}/>
+                                    <Dropdown data={brand} value={'brand'} setProduct={setProduct} product={product} />
                                 </View>
-                                                                {/* <TextInput placeholder='Category'
+                                {/* <TextInput placeholder='Category'
                                     mode='outlined'
                                     style={screenStyles.inputBox} keyboardType='default' onChangeText={(e) => setProduct({ ...product, category: e })}
                                 /> */}
                                 <View style={screenStyles.inputBox}>
-                                    <Dropdown data={categories} value={'category'} setProduct={setProduct} product={product} />
+                                    <Dropdown data={categories.slice(1)} value={'category'} setProduct={setProduct} product={product} />
                                 </View>
                                 <View style={screenStyles.inputBox}>
                                     <Dropdown data={size} value={'size'} setProduct={setProduct} product={product} />

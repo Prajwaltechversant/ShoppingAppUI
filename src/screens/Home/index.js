@@ -8,7 +8,8 @@ import ProductCard from '../../components/ProductCards'
 import { ActivityIndicator } from 'react-native-paper'
 import Add from '../../components/AddProduct'
 import { useDispatch, useSelector } from 'react-redux'
-import { searchProduct } from '../../redux/slices/productSlice'
+import { onRefresh, searchProduct, setFilterItems } from '../../redux/slices/productSlice'
+import NoData from '../../components/nodata'
 
 export default function Home({ navigation }) {
   const [searchStatus, setSearchStatus] = useState(false)
@@ -25,11 +26,12 @@ export default function Home({ navigation }) {
   // )
 
 
-  // let sample = products[0].uri
-
+  const [data, setData] = useState([])
+  const [reFilter, setRefilter] = useState(false)
+  const [isClicked, setisClicked] = useState('')
 
   const searchProductS = (item) => {
-    console.log("query",item)
+    console.log("query", item)
     if (item.trim() !== '') {
       dispatch(searchProduct(item))
       setSearchStatus(true)
@@ -39,43 +41,76 @@ export default function Home({ navigation }) {
     }
   }
   const searchresult = useSelector(state => state.products.searchItems)
+  // const filterArray = useSelector(state => state.products.searchItems)
   useEffect(() => {
     setSearchresults(searchresult)
   }, [searchresult])
-  console.log(searchResults, 'filtering...')
 
-  const data = useSelector(state => state.products.allProducts)
+  const allData = useSelector(state => state.products.allProducts)
+  useEffect(()=>{
+    setData(allData)
+  },[allData])
+  useEffect(() => {
+    if (searchresult.length > 0 && !isClicked) {
+      dispatch(onRefresh());
+    }
+  }, [isClicked, searchresult]);
+
+  const displayByCategory = () => {
+    if (isClicked && isClicked === 'All Products') {
+      setSearchresults([])
+      dispatch( setFilterItems(allData))
+
+    } else {
+      const categoryData = data?.filter(item => item.category === isClicked)
+      console.log(categoryData)
+      if(categoryData.length>0){
+        setSearchresults(categoryData)
+        dispatch( setFilterItems(categoryData))
+      }else{
+        setSearchresults([])
+        // dispatch(onRefresh())
+      }
+    }
+  }
+  useEffect(() => {
+    displayByCategory()
+  }, [isClicked])
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <SearchBar searchProductS={searchProductS}  />
-        <TopNavigation />
+        <SearchBar searchProductS={searchProductS} />
+        <TopNavigation setisClicked={setisClicked} />
       </View>
       <View style={styles.contentContainer}>
-       {
-       searchResults.length>0 ?
-       <FlatList
-          data={searchResults}
-          renderItem={({ item }) => (
-            <ProductCard item={item} navigation={navigation} />
-          )}
-          numColumns={2}
-          ListEmptyComponent={
-            <Text style={{color:'red'}}>No data found</Text>
-          }
-        />
+        {
+          searchResults?.length > 0 ?
+            <FlatList
+              data={searchResults}
+              renderItem={({ item }) => (
+                <ProductCard item={item} navigation={navigation} />
+              )}
+              numColumns={2}
+              ListEmptyComponent={
+                <NoData />
+              }
+            // refreshing={true}
+            // onRefresh={data}
+            />
+            :
+            <FlatList
+              data={data}
+              renderItem={({ item }) => (
+                <ProductCard item={item} navigation={navigation} />
+              )}
+              numColumns={2}
+              ListEmptyComponent={
+                <ActivityIndicator color='red' size={'large'} animating={true} />
+              }
+            // refreshing={true}
 
-        :
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <ProductCard item={item} navigation={navigation} />
-          )}
-          numColumns={2}
-          ListEmptyComponent={
-            <ActivityIndicator color='red' size={'large'} animating={true} />
-          }
-        />
+            // onRefresh={useS}
+            />
         }
       </View>
 

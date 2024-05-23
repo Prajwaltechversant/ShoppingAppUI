@@ -62,7 +62,7 @@ export default function ProductCard({ item, navigation }) {
                     </View>
                     <View>
                         <View>
-                            <Icon name='heart' size={20} color='red' />
+                            <Icon name='heart' size={20} style={styles.likebtn} />
                             {/* <Text style={styles.text}>wdwqdwqd</Text> */}
                         </View>
                     </View>

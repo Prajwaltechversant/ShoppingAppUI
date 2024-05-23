@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native"
+import coloPalette from "../../assets/Theme/coloPalette"
 
 const styles = StyleSheet.create({
 
@@ -21,24 +22,32 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: 20,
         height: 20,
-        marginBottom: 5
+        marginBottom: 5,
+        backgroundColor:'tranparent',
+        position:'absolute',
+        right:15,
+        top:15
     },
     modalContent: {
+        position:'relative',
         flex: 1,
         flexDirection: 'row',
+
     },
     filterMenu: {
         flex: 1,
-        backgroundColor:'#cdcfd1',
+        backgroundColor:coloPalette.light.tertiary,
         padding:20
 
 
+    },filtericon:{
+        color:'red'
     }
     , filterContainer: {
-        flex: 3
+        flex: 3,
     },
     filterMenuText:{
-        color:'black'
+        color:'black',
     },
     filterMenuOption:{
         marginVertical:10,
@@ -47,7 +56,7 @@ const styles = StyleSheet.create({
     btnContainer:{
         flexDirection:'row',
         gap:5,
-        justifyContent:'center'
+        justifyContent:'center',
     }
 })
 

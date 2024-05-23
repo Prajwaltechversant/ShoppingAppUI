@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
+import coloPalette from '../../assets/Theme/coloPalette'
 
+// const width = dim
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -9,7 +11,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#F8F4E1',
+    backgroundColor: coloPalette.light.tertiary,
     borderTopLeftRadius: 40, 
     justifyContent:'center',
     alignItems:'center',
@@ -18,8 +20,8 @@ const styles = StyleSheet.create({
   },
   addContainer: {
     position: 'absolute',
-    bottom: 60,
-    right: 20,
+    bottom: 0,
+    right: 1,
   },
 })
 

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import coloPalette from "../../assets/Theme/coloPalette";
 
 const styles = StyleSheet.create({
     container: {
@@ -10,7 +11,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 5,
         marginVertical: 10,
-        marginHorizontal:5
+        marginHorizontal:5,
+        backgroundColor:'white',
+        
     },
     cardContent: {
         backgroundColor: 'transparent', position: 'absolute',
@@ -35,8 +38,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
 
         
-
-        
+    },
+    likebtn:{
+            color:coloPalette.light.primary,
+            position:'absolute',
+            right:-10,
+            
     },
     rating: {
         flexDirection: 'row',
@@ -44,11 +51,11 @@ const styles = StyleSheet.create({
     },
     trashIcon:{
         position:'absolute',
-        right:20,
+        right:0,
         top:5,
-        backgroundColor:'white',
         borderRadius:100,
-        padding:5
+        padding:5,
+        // backgroundColor:coloPalette.light.tertiary
         
     }
 
