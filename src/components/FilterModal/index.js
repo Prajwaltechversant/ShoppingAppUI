@@ -97,7 +97,7 @@ export default function FilterModal() {
                 <Ionicons name='filter' size={30} color={coloPalette.light.primary} styles={styles.filtericon} />
             </TouchableOpacity>
 
-            <Animated.View  >
+            <Animated.View   >
                 <Modal visible={isModalVisible} transparent={true} animationType='fade'
 
                 //  supportedOrientations={['portrait']} // ios

@@ -6,11 +6,13 @@ import Orders from '../Orders'
 import Cart from '../Cart'
 import HomeIcon from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import Entry from '../entry'
 const Tab = createBottomTabNavigator()
 
 export default function Tabs() {
     return (
-        <Tab.Navigator>
+       <>
+       <Tab.Navigator>
             <Tab.Screen name='Home' component={Home} options={{
                 headerShown: false, tabBarIcon: ({ focused, color, size }) => {
                     return (
@@ -38,5 +40,6 @@ export default function Tabs() {
                 tabBarActiveTintColor:'red', tabBarInactiveTintColor:'black',
             }} />
         </Tab.Navigator>
+       </>
     )
 }
