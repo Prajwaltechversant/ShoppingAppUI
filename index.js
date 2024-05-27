@@ -10,7 +10,7 @@ import { persistor, store } from './src/redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Entry from './src/screens/entry';
-
+import database from './src/dB';
 
 const Root = () => (
     <Provider store={store}>
