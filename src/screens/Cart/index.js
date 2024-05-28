@@ -10,9 +10,11 @@ import NoData from '../../components/nodata';
 import coloPalette from '../../assets/Theme/coloPalette';
 import Icon from 'react-native-vector-icons/AntDesign'
 import { desc } from '@nozbe/watermelondb/QueryDescription';
+import Item from './Item';
+import { withObservables } from '@nozbe/watermelondb/react'
 
 
-export default function Cart() {
+ export default function Cart() {
 
   const [task, setAllTask] = useState()
   const [data, setData] = useState({
@@ -22,15 +24,9 @@ export default function Cart() {
   })
 
   const [isUpdating, setIsUpdating] = useState(false)
-  // const getData = async () => {
-  //   console.log(data)
-  // }
-  // useEffect(() => {
-  //   getData()
-  // }, [])
 
   const handleAdd = async () => {
-
+    console.log('add tasks')
     const { title, description } = data;
     if (!title || !description) {
       Alert.alert("Please enter the Complete details")
@@ -42,9 +38,6 @@ export default function Cart() {
             task.description = description;
             task.is_MarkAsDone = false;
           })
-          // return note
-          getAllTasks()
-
         })
         setData({
           title: '',
@@ -57,8 +50,8 @@ export default function Cart() {
 
   }
 
-
   const getAllTasks = async () => {
+    console.log('get tasks')
     const data = await Task.allData()
     let temp = []
     data.forEach(item => {
@@ -69,61 +62,61 @@ export default function Cart() {
   }
   useEffect(() => {
     getAllTasks()
-
   }, [])
-  // console.log(task)
-
-  const handleDelete = async (id) => {
-    await database.write(async () => {
-      const task = await database.get('tasks').find(id)
-      // console.log(task)
-      await task.destroyPermanently()
-      getAllTasks()
-
-    })
-  }
-
-  const handleEdit = async (id) => {
-    const date = new Date()
-    const tdy = date.getTime()
-
-    await database.write(async () => {
-      const task = await database.get('tasks').find(id)
-      await task.update(() => {
-        task.is_MarkAsDone = true;
-        task.updated_at = tdy;
-      })
-    })
-    getAllTasks()
-  }
 
 
-  const handleSetUpdateData = (item) => {
+  const enhance = withObservables([], ({database})=>({
+    tasks: database.
 
-    if (!item.is_MarkAsDone) {
-      setData({
-        title: item.title,
-        description: item.description,
-        id: item.id
-      })
-      setIsUpdating(true)
+  }))
+  // const handleDelete = async (id) => {
+  //   console.log('delete tasks')
 
-    }
+  //   await database.write(async () => {
+  //     const task = await database.get('tasks').find(id)
+  //     await task.destroyPermanently()
+  //   })
+  // }
 
-  }
+  // const handleEdit = async (id) => {
+  //   const date = new Date()
+  //   const tdy = date.getTime()
+
+  //   await database.write(async () => {
+  //     const task = await database.get('tasks').find(id)
+  //     await task.update(() => {
+  //       task.is_MarkAsDone = true;
+  //       task.updated_at = tdy;
+  //     })
+  //   })
+  //   // getAllTasks()
+  // }
+
+
+  // const handleSetUpdateData = (item) => {
+  //   console.log('handle updateset')
+
+  //   if (!item.is_MarkAsDone) {
+  //     setData({
+  //       title: item.title,
+  //       description: item.description,
+  //       id: item.id
+  //     })
+  //     setIsUpdating(true)
+
+  //   }
+  // }
 
   const updateTask = async () => {
+    console.log('update task')
     const { title, description, id } = data
-
     const editTask = await database.write(async () => {
       const task = await database.get('tasks').find(id);
       await task.update(() => {
         task.title = title;
         task.description = description;
-
       })
     })
-    getAllTasks()
     setIsUpdating(false)
     setData({
       title: '',
@@ -131,6 +124,11 @@ export default function Cart() {
       id: ''
     })
   }
+
+
+  console.log('re render............')
+
+
   return (
     <View>
       <View>
@@ -162,7 +160,7 @@ export default function Cart() {
         </View>
 
         <View style={{ marginTop: 10, padding: 5 }}>
-          <FlatList
+          {/* <FlatList
             data={task}
             scrollsToTop={true}
             renderItem={({ item }) => (
@@ -184,18 +182,25 @@ export default function Cart() {
                   <TouchableOpacity onPress={() => handleDelete(item.id)}>
                     <Icon name='delete' size={20} color='red' />
                   </TouchableOpacity>
-
                 </View>
-                
-
-
               </View>
             )}
           // refreshing={true}
           // onRefresh={data}
+          /> */}
+          <FlatList
+            data={tasks}
+            scrollsToTop={true}
+            renderItem={({ item }) => (
+              <Item item={item}  setData={setData} setIsUpdating={setIsUpdating}  />
+            )}
+          // refreshing={true}
+          // onRefresh={data}`
           />
         </View>
       </View>
     </View>
   )
 }
+
+

@@ -25,7 +25,7 @@ export default class Task extends Model{
     // getdata
 
     static async allData(){
-        const alldata = await database.get('tasks').query().fetch()
+        const alldata = await database.get('tasks')
         return alldata;
     }
 
