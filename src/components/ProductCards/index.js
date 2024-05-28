@@ -58,12 +58,10 @@ export default function ProductCard({ item, navigation }) {
 
                     <View>
                         <Text style={styles.text}>{item.discount}%</Text>
-                        {/* <Text style={styles.text}>lorem</Text> */}
                     </View>
                     <View>
                         <View>
                             <Icon name='heart' size={20} style={styles.likebtn} />
-                            {/* <Text style={styles.text}>wdwqdwqd</Text> */}
                         </View>
                     </View>
                 </View>

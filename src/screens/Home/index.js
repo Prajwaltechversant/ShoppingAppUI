@@ -74,7 +74,6 @@ export default function Home({navigation}) {
         dispatch(setFilterItems(categoryData));
       } else {
         setSearchresults([]);
-        // dispatch(onRefresh())
       }
     }
   };
