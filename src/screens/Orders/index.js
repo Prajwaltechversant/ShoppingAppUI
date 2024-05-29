@@ -9,15 +9,17 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { withObservables } from '@nozbe/watermelondb/react';
 import EnhancedItem from './Item';
 import Item from './Item';
+import { useQuery, useRealm } from '@realm/react';
+import { Task } from '../../REALM/Schema/taskSchema';
 
-function Order({ dataT }) {
+export default function Order({ dataT }) {
   console.log("ahah", dataT)
   const [data, setData] = useState({
     title: '',
     description: '',
     id: ''
   });
-
+  const realm = useRealm()
   const [isUpdating, setIsUpdating] = useState(false);
   const handleAdd = async () => {
     const { title, description } = data;
@@ -25,13 +27,9 @@ function Order({ dataT }) {
       Alert.alert("Please enter the Complete details");
     } else {
       try {
-        await database.write(async () => {
-          await database.get('tasks').create(task => {
-            task.title = title;
-            task.description = description;
-            task.is_MarkAsDone = false;
-          });
-        });
+          realm.write(()=>{
+            realm.create('Task', {title:title, description:description, is_Mark_As_Done:false})
+          })
         setData({
           title: '',
           description: ''
@@ -42,6 +40,8 @@ function Order({ dataT }) {
     }
   };
 
+  const task = useQuery('Task')
+  console.log(task)
   const updateTask = async () => {
     const { title, description, id } = data;
     try {
@@ -97,10 +97,10 @@ function Order({ dataT }) {
         </View>
         <View style={{ marginTop: 10, padding: 5 }}>
           <FlatList
-            data={dataT}
+            data={task}
             scrollsToTop={true}
             renderItem={({ item }) => (
-              <EnhancedItem item={item} setData={setData} setIsUpdating={setIsUpdating} />
+              <Item item={item} setData={setData} setIsUpdating={setIsUpdating} />
             )}
           />
         </View>
@@ -109,9 +109,3 @@ function Order({ dataT }) {
   );
 }
 
-const enhance = withObservables([], () => ({
-  dataT: database.get('tasks').query().observe()
-}));
-
-const EnhancedCart = enhance(Order);
-export default EnhancedCart;

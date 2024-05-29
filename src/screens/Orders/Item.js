@@ -64,10 +64,4 @@ const Item = ({ item, setData, setIsUpdating }) => {
 };
 
 
-// export default  memo(Item)
-const enhance = withObservables(['item'], ({ item }) => ({
-  item
-}));
-
-const EnhancedItem = enhance(Item);
-export default EnhancedItem;
+export default memo(Item)

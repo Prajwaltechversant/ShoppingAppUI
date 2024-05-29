@@ -6,6 +6,8 @@ import { LoginContextAPI } from '../../context/LoginContext'
 import LoginStack from './LoginStack';
 import { useSelector } from 'react-redux';
 import SplashScreen from '../splashscreen';
+import { RealmProvider, createRealmContext } from '@realm/react';
+import { Task, config } from '../../REALM/Schema/taskSchema';
 
 export default function Main() {
   const [token, setToken] = useState(false)
@@ -36,13 +38,17 @@ export default function Main() {
       <SplashScreen />
     )
   }
+
+
   return (
     <>
       {
         !token ?
           <LoginStack />
           :
-          <NativeStack />
+          <RealmProvider schema={[Task]} schemaVersion={3}>
+            <NativeStack />
+          </RealmProvider>
       }
     </>
   )
