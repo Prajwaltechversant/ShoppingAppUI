@@ -63,6 +63,9 @@ function Cart({ dataT }) {
     }
   };
 
+
+  // const isHermes = () => !!global.HermesInternal;
+  // console.log(isHermes)
   return (
     <View>
       <View>

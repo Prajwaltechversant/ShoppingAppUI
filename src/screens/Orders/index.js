@@ -1,76 +1,117 @@
-import React from 'react';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withDecay,
-} from 'react-native-reanimated';
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
-import { StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TextInput } from 'react-native-paper';
+import styles from './style';
+import Plus from 'react-native-vector-icons/Entypo';
+import database from '../../dB';
+import coloPalette from '../../assets/Theme/coloPalette';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { withObservables } from '@nozbe/watermelondb/react';
+import EnhancedItem from './Item';
+import Item from './Item';
 
-function clamp(val, min, max) {
-  return Math.min(Math.max(val, min), max);
-}
+function Order({ dataT }) {
+  console.log("ahah", dataT)
+  const [data, setData] = useState({
+    title: '',
+    description: '',
+    id: ''
+  });
 
-const { width, height } = Dimensions.get('screen');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const handleAdd = async () => {
+    const { title, description } = data;
+    if (!title || !description) {
+      Alert.alert("Please enter the Complete details");
+    } else {
+      try {
+        await database.write(async () => {
+          await database.get('tasks').create(task => {
+            task.title = title;
+            task.description = description;
+            task.is_MarkAsDone = false;
+          });
+        });
+        setData({
+          title: '',
+          description: ''
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
-export default function Orders() {
-  const translationX = useSharedValue(0);
-  const translationY = useSharedValue(0);
-  const prevTranslationX = useSharedValue(0);
-  const prevTranslationY = useSharedValue(0);
+  const updateTask = async () => {
+    const { title, description, id } = data;
+    try {
+      await database.write(async () => {
+        const task = await database.get('tasks').find(id);
+        await task.update(() => {
+          task.title = title;
+          task.description = description;
+        });
+      });
+      setIsUpdating(false);
+      setData({
+        title: '',
+        description: '',
+        id: ''
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translationX.value },
-      { translateY: translationY.value },
-    ],
-  }));
 
-  const pan = Gesture.Pan()
-    .minDistance(1)
-    .onStart(() => {
-      prevTranslationX.value = translationX.value;
-        prevTranslationY.value = translationY.value;
-    })
-    .onUpdate((event) => {
-      const maxTranslateX = width / 2 - 50;
-      const maxTranslateY = height / 2 - 50;
-
-      translationX.value = clamp(
-        prevTranslationX.value + event.translationX,
-        -maxTranslateX,
-        maxTranslateX
-      );
-      translationY.value = clamp(
-        prevTranslationY.value + event.translationY,
-        -maxTranslateY,
-        maxTranslateY
-      );
-    })
-    .runOnJS(true);
-
+  // const isHermes = () => !!global.HermesInternal;
+  // console.log(isHermes)
   return (
-    <GestureDetector gesture={pan}>
-      <Animated.View style={[animatedStyles, styles.box]}></Animated.View>
-    </GestureDetector>
+    <View>
+      <View>
+        <Text style={styles.heading}>Add Task</Text>
+        <View style={styles.formContainer}>
+          <TextInput
+            label="title"
+            mode='outlined'
+            style={styles.inputField}
+            onChangeText={(e) => setData({ ...data, title: e })}
+            value={data.title}
+          />
+          <TextInput
+            label="description"
+            mode='outlined'
+            style={styles.inputField}
+            onChangeText={(e) => setData({ ...data, description: e })}
+            value={data.description}
+          />
+          {!isUpdating ? (
+            <TouchableOpacity onPress={handleAdd}>
+              <Plus name='plus' size={30} color='black' />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={updateTask}>
+              <Plus name='edit' size={30} color='black' />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={{ marginTop: 10, padding: 5 }}>
+          <FlatList
+            data={dataT}
+            scrollsToTop={true}
+            renderItem={({ item }) => (
+              <EnhancedItem item={item} setData={setData} setIsUpdating={setIsUpdating} />
+            )}
+          />
+        </View>
+      </View>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 100,
-    height: 100,
-    backgroundColor: '#b58df1',
-    borderRadius: 20,
-  },
-});
+const enhance = withObservables([], () => ({
+  dataT: database.get('tasks').query().observe()
+}));
+
+const EnhancedCart = enhance(Order);
+export default EnhancedCart;
