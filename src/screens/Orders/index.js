@@ -3,11 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { TextInput } from 'react-native-paper';
 import styles from './style';
 import Plus from 'react-native-vector-icons/Entypo';
-import database from '../../dB';
-import coloPalette from '../../assets/Theme/coloPalette';
-import Icon from 'react-native-vector-icons/AntDesign';
-import { withObservables } from '@nozbe/watermelondb/react';
-import EnhancedItem from './Item';
 import Item from './Item';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { Task } from '../../REALM/Schema/taskSchema';
@@ -73,6 +68,8 @@ export default function Order() {
 
   // const isHermes = () => !!global.HermesInternal;
   // console.log(isHermes)
+
+  
   return (
     <View>
       <View>
