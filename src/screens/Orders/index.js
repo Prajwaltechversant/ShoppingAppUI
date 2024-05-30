@@ -1,5 +1,5 @@
-import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+ import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TextInput } from 'react-native-paper';
 import styles from './style';
 import Plus from 'react-native-vector-icons/Entypo';
@@ -9,26 +9,32 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { withObservables } from '@nozbe/watermelondb/react';
 import EnhancedItem from './Item';
 import Item from './Item';
-import { useQuery, useRealm } from '@realm/react';
+import { useObject, useQuery, useRealm } from '@realm/react';
 import { Task } from '../../REALM/Schema/taskSchema';
+import { BSON } from 'realm';
 
-export default function Order({ dataT }) {
-  console.log("ahah", dataT)
+export default function Order() {
+  const task = useQuery('Tasks')
+
   const [data, setData] = useState({
     title: '',
     description: '',
-    id: ''
+    _id: ''
   });
+  const [updateItem ,setUpdateItem] = useState(null)
   const realm = useRealm()
   const [isUpdating, setIsUpdating] = useState(false);
   const handleAdd = async () => {
+    const newObjectId = new BSON.ObjectId();
     const { title, description } = data;
     if (!title || !description) {
       Alert.alert("Please enter the Complete details");
     } else {
+
       try {
+        
           realm.write(()=>{
-            realm.create('Task', {title:title, description:description, is_Mark_As_Done:false})
+            realm.create('Tasks', {title:title, description:description, is_Mark_As_Done:false, _id:newObjectId})
           })
         setData({
           title: '',
@@ -40,24 +46,25 @@ export default function Order({ dataT }) {
     }
   };
 
-  const task = useQuery('Task')
-  console.log(task)
+
+
   const updateTask = async () => {
-    const { title, description, id } = data;
+    const { title, description, _id } = data;
+    const itemToBeUpdated = realm.objectForPrimaryKey('Tasks', _id)
     try {
-      await database.write(async () => {
-        const task = await database.get('tasks').find(id);
-        await task.update(() => {
-          task.title = title;
-          task.description = description;
+      if(itemToBeUpdated){
+        realm.write(() => {
+          itemToBeUpdated.title = title;
+          itemToBeUpdated.description =description
+          
         });
-      });
       setIsUpdating(false);
       setData({
         title: '',
         description: '',
         id: ''
       });
+      }
     } catch (err) {
       console.log(err);
     }

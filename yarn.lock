@@ -2957,11 +2957,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 20.12.12
-  resolution: "@types/node@npm:20.12.12"
+  version: 20.12.13
+  resolution: "@types/node@npm:20.12.13"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 5373983874b9af7c216e7ca5d26b32a8d9829c703a69f1e66f2113598b5be8582c0e009ca97369f1ec9a6282b3f92812208d06eb1e9fc3bd9b939b022303d042
+  checksum: 9ec8971a76b2435379c10689c639ba1bbf4451075709bdf4bf23b7972a63f7d966947914410f2d3711a315e1157d782b76cfadc32944e29db9dd444221aea699
   languageName: node
   linkType: hard
 
@@ -4676,9 +4676,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.668":
-  version: 1.4.783
-  resolution: "electron-to-chromium@npm:1.4.783"
-  checksum: 49dfd8614c8e28076ca82e241a4a246685440dacde5e2cdb85d57a0d5bcc1cbd5de3201b3158b94ad5f1016e91ab9bb0d4da8cfe46d2897400fb62e6a5be198e
+  version: 1.4.785
+  resolution: "electron-to-chromium@npm:1.4.785"
+  checksum: 4b983ba9274be7706663c7892e602e968aa3c6e2e8ae65e5a243901a39ec6838e8ba8ac6c8f001e150a690287343a584cc82105175704559894c37b4771e2090
   languageName: node
   linkType: hard
 
@@ -5459,9 +5459,9 @@ __metadata:
   linkType: hard
 
 "flow-parser@npm:0.*":
-  version: 0.237.0
-  resolution: "flow-parser@npm:0.237.0"
-  checksum: 025a56cc26418898b1af301093c36987c2780c27996f6c097ee752d7013dac0f0c55c790784e0227a814b36acbe8bdbbcf3c1e4a29fa8f3702fc0d255eecbc63
+  version: 0.237.1
+  resolution: "flow-parser@npm:0.237.1"
+  checksum: 0b65f36b043767d633f91fd3ead31c64da251133a7837b98102a88d2281a0ccbdd5e9742ae5f8e59d40dbfff960abd62054354827f7593e066b712005259e1c3
   languageName: node
   linkType: hard
 

@@ -34,7 +34,6 @@ true)
             </View>
           </View>
         </Animated.View>
-
         <Card.Actions>
           <Animated.View style={[styles.cardActions, loadingAnimation]}>
             <View style={{flexDirection: 'row'}}>

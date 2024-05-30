@@ -4,30 +4,30 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import database from '../../dB';
 import coloPalette from '../../assets/Theme/coloPalette';
 import { withObservables } from '@nozbe/watermelondb/react';
+import { useObject, useQuery, useRealm } from '@realm/react';
 
 const Item = ({ item, setData, setIsUpdating }) => {
+  const realm = useRealm()
+  const task = useObject('Tasks', item._id)
+  console.log(task)
+
   const handleDelete = async () => {
     try {
-      await database.write(async () => {
-        const task = await database.get('tasks').find(item.id);
-        await task.destroyPermanently();
-      });
+      realm.write(()=>{
+        realm.delete(task)
+      })
     } catch (err) {
       console.log(err);
     }
   };
 
+
   const handleEdit = async () => {
-    const date = new Date();
-    const tdy = date.getTime();
     try {
-      await database.write(async () => {
-        const task = await database.get('tasks').find(item.id);
-        await task.update(() => {
-          task.is_MarkAsDone = true;
-          task.updated_at = tdy;
+        realm.write(() => {
+          task.is_Mark_As_Done = true;
         });
-      });
+      
     } catch (err) {
       console.log(err);
     }
@@ -38,7 +38,7 @@ const Item = ({ item, setData, setIsUpdating }) => {
       setData({
         title: item.title,
         description: item.description,
-        id: item.id
+        _id:item._id
       });
       setIsUpdating(true);
     }
@@ -50,7 +50,7 @@ const Item = ({ item, setData, setIsUpdating }) => {
       <Text style={{ color: 'red', fontSize: 25 }}>{item.description}</Text>
       <View style={{ flexDirection: 'row', gap: 15 }}>
         <TouchableOpacity onPress={handleEdit}>
-          <Icon name='checkcircle' size={20} color={item.is_MarkAsDone ? 'green' : 'white'} />
+          <Icon name='checkcircle' size={20} color={item.is_Mark_As_Done ? 'green' : 'white'} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSetUpdateData}>
           <Icon name='edit' size={20} color='blue' />
